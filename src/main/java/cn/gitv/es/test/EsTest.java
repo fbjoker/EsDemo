@@ -26,11 +26,14 @@ import org.elasticsearch.search.aggregations.metrics.cardinality.CardinalityAggr
 import org.elasticsearch.search.aggregations.metrics.valuecount.ValueCountAggregationBuilder;
 import org.elasticsearch.threadpool.FixedExecutorBuilder;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
+
+import static cn.gitv.es.test.DataUtils.nextTime;
 import static org.elasticsearch.common.xcontent.XContentFactory.*;
 import com.alibaba.fastjson.JSON;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -50,9 +53,10 @@ public class EsTest {
             //单条写入测试
             //indexTest(1,"s4");
             //批量写入测试
-            deleteIndex("bulktest4");
-            createIndex("bulktest4");
-            createMapping("bulktest4");
+//            deleteIndex("bulktest10");
+//            createIndex("bulktest10");
+            //createMapping("bulktest4");
+//            createDataMapping10("bulktest10");
            // createDataMapping("bulktest5");
            // createDataMapping20("bulktest5");
             System.setProperty("log4j.configuration", "log4j.properties");
@@ -61,11 +65,17 @@ public class EsTest {
                 System.exit(0);
             }
             String index= args[0];
+            //一次插入的行数
             int rows = Integer.parseInt(args[1]);
+            //字段数
             int num  = Integer.parseInt(args[2]);
+            //生产线程数
             int thread  = Integer.parseInt(args[3]);
+            //写入线程数
             int wthread  = Integer.parseInt(args[4]);
+            //总数据
             Long total  = Long.parseLong(args[5]);
+
            // bulkmap(index,rows,num);
             //           // bulkThread(index,rows,num,thread);
             try {
@@ -155,7 +165,7 @@ public class EsTest {
                         .put("client.transport.sniff", true)
                         .put("client.transport.ping_timeout","60s")
                         //.put("cluster.name", "es-test")
-                        .put("cluster.name", "essearch-test")
+                        .put("cluster.name", "es-cluster")
                         .build();
 
                 //  .put(Names.named(), new FixedExecutorBuilder(settings, "bulk", availableProcessors, 200))
@@ -164,7 +174,7 @@ public class EsTest {
                         .addTransportAddress(new TransportAddress(InetAddress.getByName("10.10.121.120"), 9300))
                         .addTransportAddress(new TransportAddress(InetAddress.getByName("10.10.121.121"), 9300));*/
                  client = new PreBuiltTransportClient(settings)
-                         .addTransportAddress(new TransportAddress(InetAddress.getByName("10.10.130.151"), 9300))
+                         .addTransportAddress(new TransportAddress(InetAddress.getByName("10.10.121.213"), 9300))
                       /*   .addTransportAddress(new TransportAddress(InetAddress.getByName("10.10.130.152"), 9300))
                          .addTransportAddress(new TransportAddress(InetAddress.getByName("10.10.130.153"), 9300))*/;
 
@@ -441,7 +451,8 @@ public class EsTest {
                 }else if(key.contains("Id")){
                     datamap.put(key,getLong());
                 } else {
-                    datamap.put(key,getValues());
+//                    datamap.put(key,getValues());
+                    datamap.put(key,new SimpleDateFormat("yyyy-MM-dd").format(nextTime()));
                 }
             }
         }catch (Exception e){

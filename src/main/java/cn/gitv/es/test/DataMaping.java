@@ -178,7 +178,7 @@ public class DataMaping {
         maping.put("partialtype","string");
     }
 
-    public static void maping10() {
+   /* public static void maping10() {
         maping10.put("day", "string");
         maping10.put("action", "int");
         maping10.put("logId", "string");
@@ -188,6 +188,14 @@ public class DataMaping {
         maping10.put("clientVersion", "string");
         maping10.put("appMark", "string");
         maping10.put("clientTime", "string");
+    }*/
+    public static void maping10() {
+        maping10.put("day", "string");
+        maping10.put("action", "int");
+        maping10.put("productId", "int");
+        maping10.put("contentSrcId", "int");
+        maping10.put("videoSrcId", "int");
+        maping10.put("ls", "long");
     }
 
     public static void maping20() {
